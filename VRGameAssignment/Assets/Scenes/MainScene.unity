@@ -319,6 +319,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAttackAndDefence
   Player: {fileID: 577692035}
   Enemy: {fileID: 724898516}
+  attackCooldown: 0.5
 --- !u!82 &875882
 AudioSource:
   m_ObjectHideFlags: 0
@@ -425,7 +426,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 25773863}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: PivotPoint
   m_TagString: WeaponPivot
   m_Icon: {fileID: 0}
@@ -1818,6 +1819,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAttackAndDefence
   Player: {fileID: 577692035}
   Enemy: {fileID: 724898516}
+  attackCooldown: 0.5
 --- !u!1 &620236604
 GameObject:
   m_ObjectHideFlags: 0
@@ -2242,7 +2244,7 @@ GameObject:
   - component: {fileID: 724898521}
   - component: {fileID: 724898522}
   - component: {fileID: 724898523}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Enemy1
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -2262,7 +2264,7 @@ CapsuleCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
@@ -2383,7 +2385,7 @@ Rigidbody:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -2478,7 +2480,7 @@ BoxCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 256
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
@@ -2500,6 +2502,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAttackAndDefence
   Player: {fileID: 577692035}
   Enemy: {fileID: 724898516}
+  attackCooldown: 0.5
 --- !u!54 &867472993
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2508,9 +2511,9 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 867472984}
   serializedVersion: 5
-  m_Mass: 1
+  m_Mass: 0.01
   m_LinearDamping: 0
-  m_AngularDamping: 0.05
+  m_AngularDamping: 0
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -2519,14 +2522,116 @@ Rigidbody:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 256
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 0
-  m_IsKinematic: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 14
   m_CollisionDetection: 0
+--- !u!153 &867472996
+ConfigurableJoint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 867472984}
+  serializedVersion: 4
+  m_ConnectedBody: {fileID: 724898522}
+  m_ConnectedArticulationBody: {fileID: 0}
+  m_Anchor: {x: 0, y: 0.0013151212, z: 0}
+  m_Axis: {x: 1, y: 0, z: 0}
+  m_AutoConfigureConnectedAnchor: 1
+  m_ConnectedAnchor: {x: 0, y: 0, z: 0}
+  m_SecondaryAxis: {x: 0, y: 1, z: 0}
+  m_XMotion: 0
+  m_YMotion: 0
+  m_ZMotion: 0
+  m_AngularXMotion: 0
+  m_AngularYMotion: 0
+  m_AngularZMotion: 0
+  m_LinearLimitSpring:
+    spring: 0
+    damper: 0
+  m_LinearLimit:
+    limit: 0
+    bounciness: 0
+    contactDistance: 0
+  m_AngularXLimitSpring:
+    spring: 0
+    damper: 0
+  m_LowAngularXLimit:
+    limit: 0
+    bounciness: 0
+    contactDistance: 0
+  m_HighAngularXLimit:
+    limit: 0
+    bounciness: 0
+    contactDistance: 0
+  m_AngularYZLimitSpring:
+    spring: 0
+    damper: 0
+  m_AngularYLimit:
+    limit: 0
+    bounciness: 0
+    contactDistance: 0
+  m_AngularZLimit:
+    limit: 0
+    bounciness: 0
+    contactDistance: 0
+  m_TargetPosition: {x: 0, y: 0, z: 0}
+  m_TargetVelocity: {x: 0, y: 0, z: 0}
+  m_XDrive:
+    serializedVersion: 4
+    positionSpring: 0
+    positionDamper: 0
+    maximumForce: 3.4028233e+38
+    useAcceleration: 0
+  m_YDrive:
+    serializedVersion: 4
+    positionSpring: 0
+    positionDamper: 0
+    maximumForce: 3.4028233e+38
+    useAcceleration: 0
+  m_ZDrive:
+    serializedVersion: 4
+    positionSpring: 0
+    positionDamper: 0
+    maximumForce: 3.4028233e+38
+    useAcceleration: 0
+  m_TargetRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_TargetAngularVelocity: {x: 0, y: 0, z: 0}
+  m_RotationDriveMode: 0
+  m_AngularXDrive:
+    serializedVersion: 4
+    positionSpring: 0
+    positionDamper: 0
+    maximumForce: 3.4028233e+38
+    useAcceleration: 0
+  m_AngularYZDrive:
+    serializedVersion: 4
+    positionSpring: 0
+    positionDamper: 0
+    maximumForce: 3.4028233e+38
+    useAcceleration: 0
+  m_SlerpDrive:
+    serializedVersion: 4
+    positionSpring: 0
+    positionDamper: 0
+    maximumForce: 3.4028233e+38
+    useAcceleration: 0
+  m_ProjectionMode: 0
+  m_ProjectionDistance: 0.1
+  m_ProjectionAngle: 180
+  m_ConfiguredInWorldSpace: 0
+  m_SwapBodies: 0
+  m_BreakForce: Infinity
+  m_BreakTorque: Infinity
+  m_EnableCollision: 0
+  m_EnablePreprocessing: 1
+  m_MassScale: 1
+  m_ConnectedMassScale: 1
 --- !u!1 &874294179 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: a2014984ca694054a8897a14d843f67b, type: 3}
@@ -2906,7 +3011,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6598815579406187037, guid: 18ddb545287c546e19cc77dc9fbb2189, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3627,19 +3732,19 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 9c51e7bd1ea7a27469ab63dbb43f8a53, type: 3}
       propertyPath: m_LocalScale.x
-      value: 300
+      value: 299.99997
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9c51e7bd1ea7a27469ab63dbb43f8a53, type: 3}
       propertyPath: m_LocalScale.y
-      value: 300
+      value: 300.00006
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9c51e7bd1ea7a27469ab63dbb43f8a53, type: 3}
       propertyPath: m_LocalScale.z
-      value: 300
+      value: 300.00003
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9c51e7bd1ea7a27469ab63dbb43f8a53, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.628
+      value: 0.62799984
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9c51e7bd1ea7a27469ab63dbb43f8a53, type: 3}
       propertyPath: m_LocalPosition.y
@@ -3647,7 +3752,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9c51e7bd1ea7a27469ab63dbb43f8a53, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.442
+      value: 0.44199923
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9c51e7bd1ea7a27469ab63dbb43f8a53, type: 3}
       propertyPath: m_LocalRotation.w
@@ -3655,7 +3760,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9c51e7bd1ea7a27469ab63dbb43f8a53, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.26540422
+      value: -0.26540425
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9c51e7bd1ea7a27469ab63dbb43f8a53, type: 3}
       propertyPath: m_LocalRotation.y
@@ -3682,6 +3787,10 @@ PrefabInstance:
       value: Sword
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 9c51e7bd1ea7a27469ab63dbb43f8a53, type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 9c51e7bd1ea7a27469ab63dbb43f8a53, type: 3}
       propertyPath: m_TagString
       value: EnemyWeapon
       objectReference: {fileID: 0}
@@ -3701,6 +3810,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9c51e7bd1ea7a27469ab63dbb43f8a53, type: 3}
       insertIndex: -1
       addedObject: {fileID: 867472993}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9c51e7bd1ea7a27469ab63dbb43f8a53, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 867472996}
   m_SourcePrefab: {fileID: 100100000, guid: 9c51e7bd1ea7a27469ab63dbb43f8a53, type: 3}
 --- !u!1 &1252358252
 GameObject:
@@ -9700,7 +9812,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Charged attack ready. Press Grip to charge.
+  m_text: Charged attack ready. Press Y OR A to charge.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -10360,7 +10472,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1717954561962503725, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
       propertyPath: m_TagString
-      value: Player
+      value: PlayerParent
       objectReference: {fileID: 0}
     - target: {fileID: 1717954561962503726, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
       propertyPath: m_LocalPosition.x
@@ -16264,6 +16376,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAttackAndDefence
   Player: {fileID: 577692035}
   Enemy: {fileID: 724898516}
+  attackCooldown: 0.5
 --- !u!82 &2039793995
 AudioSource:
   m_ObjectHideFlags: 0

@@ -6,9 +6,13 @@ public class PlayerAttackAndDefence : MonoBehaviour
     HealthManager healthManager;
     public GameObject Player;
     public GameObject Enemy;
+
+    public float attackCooldown = 0.5f;
+    private float nextDamageTime = 0f;
+
     public void PlayerFightControls()
     {
-        if(this.gameObject.tag == "PlayerWeapon")
+        if (this.gameObject.tag == "PlayerWeapon")
         {
             healthManager = Enemy.GetComponent<HealthManager>();
             healthManager.DamageManager(Enemy, Player);
@@ -16,28 +20,33 @@ public class PlayerAttackAndDefence : MonoBehaviour
     }
     public void PlayerDefence()
     {
-        if(this.gameObject.tag == "PlayerShield" || this.gameObject.tag == "PlayerWeapon")
+        if (this.gameObject.tag == "PlayerShield" || this.gameObject.tag == "PlayerWeapon")
         {
             this.GetComponent<AudioSource>().Play();
         }
-        
     }
     private void OnCollisionEnter(Collision collision)
     {
         obj = collision.gameObject;
 
-        if(obj.tag == "Enemy")
+        if (obj.tag == "Enemy")
         {
             PlayerFightControls();
         }
-        if(obj.tag == "EnemyWeapon")
+        if (obj.tag == "EnemyWeapon")
         {
             PlayerDefence();
         }
-        if(obj.tag == "Player" && this.gameObject.tag == "EnemyWeapon")
+
+        if (obj.tag == "Player" && this.gameObject.tag == "EnemyWeapon")
         {
-            healthManager = Player.GetComponent<HealthManager>();
-            healthManager.DamageManager(Player, Enemy);
+            if (Time.time >= nextDamageTime)
+            {
+                healthManager = Player.GetComponent<HealthManager>();
+                healthManager.DamageManager(Player, Enemy);
+
+                nextDamageTime = Time.time + attackCooldown;
+            }
         }
     }
 }

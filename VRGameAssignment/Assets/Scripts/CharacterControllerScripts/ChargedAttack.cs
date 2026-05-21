@@ -8,6 +8,8 @@ public class ChargedAttack : MonoBehaviour
     public GameObject fireParticles;
     public AudioSource chargeSound;
     public GameObject TriggerPanel;
+    GameObject Player;
+    HealthManager healthManager;
 
     private int currentHits = 0;
     private bool isCharged = false;
@@ -35,6 +37,8 @@ public class ChargedAttack : MonoBehaviour
     {
         if (TriggerPanel != null) TriggerPanel.SetActive(false);
         if (fireParticles != null) fireParticles.SetActive(false);
+        Player = GameObject.FindGameObjectWithTag("PlayerParent");
+        healthManager = Player.GetComponent<HealthManager>();
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -74,6 +78,7 @@ public class ChargedAttack : MonoBehaviour
         isCharged = false;
         currentHits = 0;
 
+        healthManager.damage = healthManager.damage * 2;
         if (TriggerPanel != null) TriggerPanel.SetActive(false);
         if (fireParticles != null) fireParticles.SetActive(true);
         if (chargeSound != null) chargeSound.Play();
@@ -83,6 +88,7 @@ public class ChargedAttack : MonoBehaviour
 
     void ResetAbility()
     {
+        healthManager.damage = healthManager.damage / 2;
         isAbilityActive = false;
         if (fireParticles != null) fireParticles.SetActive(false);
     }

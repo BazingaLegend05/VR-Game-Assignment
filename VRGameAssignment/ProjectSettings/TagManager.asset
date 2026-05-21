@@ -9,6 +9,7 @@ TagManager:
   - PlayerWeapon
   - Defence
   - WeaponPivot
+  - PlayerParent
   layers:
   - Default
   - TransparentFX
@@ -18,8 +19,8 @@ TagManager:
   - UI
   - Grab
   - UI
-  - 
-  - 
+  - Enemy
+  - Enemy Weapon
   - 
   - 
   - 

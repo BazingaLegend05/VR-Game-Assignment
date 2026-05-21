@@ -19,6 +19,13 @@ public class EnemyMovement : MonoBehaviour
         SwordPosition = GameObject.FindGameObjectWithTag("EnemyWeapon").transform;
         SwordPivotPoint = GameObject.FindGameObjectWithTag("WeaponPivot").transform;
 
+        Collider enemyCollider = GetComponent<Collider>();
+        Collider swordCollider = SwordPosition.GetComponent<Collider>();
+        if (enemyCollider != null && swordCollider != null)
+        {
+            Physics.IgnoreCollision(enemyCollider, swordCollider, true);
+        }
+
         StartCoroutine(EnemyCycleRoutine());
     }
 
@@ -46,9 +53,9 @@ public class EnemyMovement : MonoBehaviour
                 rb.MoveRotation(targetRot);
             }
 
-            RaycastHit hit;
             Vector3 rayOrigin = transform.position;
             Vector3 forward = transform.forward;
+            RaycastHit hit;
 
             if (Physics.Raycast(rayOrigin, forward, out hit))
             {
@@ -64,18 +71,22 @@ public class EnemyMovement : MonoBehaviour
 
     private IEnumerator AttackRoutine()
     {
-        Vector3 originalPos = SwordPosition.position;
-        Quaternion originalRot = SwordPosition.rotation;
+        Vector3 originalLocalPos = SwordPosition.localPosition;
+        Quaternion originalLocalRot = SwordPosition.localRotation;
+
         yield return StartCoroutine(RotateObjectRoutine());
 
         float elapsed = 0;
         while (elapsed < 0.3f)
         {
-            SwordPosition.position = Vector3.Lerp(SwordPosition.position, originalPos, elapsed / 0.3f);
-            SwordPosition.rotation = Quaternion.Slerp(SwordPosition.rotation, originalRot, elapsed / 0.3f);
+            SwordPosition.localPosition = Vector3.Lerp(SwordPosition.localPosition, originalLocalPos, elapsed / 0.3f);
+            SwordPosition.localRotation = Quaternion.Slerp(SwordPosition.localRotation, originalLocalRot, elapsed / 0.3f);
             elapsed += Time.deltaTime;
             yield return null;
         }
+
+        SwordPosition.localPosition = originalLocalPos;
+        SwordPosition.localRotation = originalLocalRot;
     }
 
     private IEnumerator RotateObjectRoutine()

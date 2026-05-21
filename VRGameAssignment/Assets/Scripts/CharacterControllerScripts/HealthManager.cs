@@ -48,7 +48,7 @@ public class HealthManager : MonoBehaviour
     {
         enemyDamage = obj.GetComponent<HealthManager>().damage;
 
-        if (ActiveBody.tag == "Player")
+        if (ActiveBody.tag == "PlayerParent")
         {
             this.currentHealth -= enemyDamage;
             Debug.Log("Player Health: " + this.currentHealth);
