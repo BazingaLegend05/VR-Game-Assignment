@@ -11,6 +11,8 @@ public class HealthManager : MonoBehaviour
     public GameObject damagePannel2;
     public GameObject damagePannel3;
     public GameObject deathScreen;
+    public GameObject ChargePannel;
+    public GameObject WinPannel;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void DamageVisuals(){
         healthPercentage = ((float)currentHealth / fullHealth) * 100f;
@@ -20,13 +22,13 @@ public class HealthManager : MonoBehaviour
             damagePannel2.SetActive(false);
             damagePannel3.SetActive(false);
         }
-        else if(healthPercentage <= 20 && healthPercentage > 10)
+        else if(healthPercentage <= 30 && healthPercentage > 15)
         {
             damagePannel1.SetActive(false);
             damagePannel2.SetActive(true);
             damagePannel3.SetActive(false);
         }
-        else if(healthPercentage <= 10 && healthPercentage > 0)
+        else if(healthPercentage <= 15 && healthPercentage > 0)
         {
             damagePannel1.SetActive(false);
             damagePannel2.SetActive(false);
@@ -37,6 +39,7 @@ public class HealthManager : MonoBehaviour
             damagePannel1.SetActive(false);
             damagePannel2.SetActive(false);
             damagePannel3.SetActive(false);
+            ChargePannel.SetActive(false);
             deathScreen.SetActive(true);
         }
 
@@ -52,7 +55,7 @@ public class HealthManager : MonoBehaviour
             DamageVisuals();
             if (this.currentHealth <= 0)
             {
-                Debug.Log("Player has died");///make a death screen
+                Debug.Log("Player has died");
             }
         }
         if(ActiveBody.tag == "Enemy")
@@ -61,7 +64,10 @@ public class HealthManager : MonoBehaviour
             Debug.Log("Enemy Health: " + this.currentHealth);
             if (this.currentHealth <= 0)
             {
-                Debug.Log("Enemy has died");///make a death animation
+                Debug.Log("Enemy has died");
+                obj.GetComponent<HealthManager>().ChargePannel.SetActive(false);
+                obj.GetComponent<HealthManager>().WinPannel.SetActive(true);
+                Destroy(ActiveBody);
             }
         }
 

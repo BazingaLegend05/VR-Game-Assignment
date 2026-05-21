@@ -15,6 +15,22 @@ public class ChargedAttack : MonoBehaviour
 
     [SerializeField] private InputActionProperty controllerButton;
 
+    private void OnEnable()
+    {
+        if (controllerButton.action != null)
+        {
+            controllerButton.action.Enable();
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (controllerButton.action != null)
+        {
+            controllerButton.action.Disable();
+        }
+    }
+
     private void Start()
     {
         if (TriggerPanel != null) TriggerPanel.SetActive(false);
