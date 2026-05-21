@@ -6,16 +6,14 @@ public class HealthManager : MonoBehaviour
     private int currentHealth;
     public int damage;
     private int enemyDamage;
-    private string ActiveBody;
-    private int healthPercentage;
-    private GameObject obj;
+    private float healthPercentage;
     public GameObject damagePannel1;
     public GameObject damagePannel2;
     public GameObject damagePannel3;
     public GameObject deathScreen;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void DamageVisuals(){
-        healthPercentage = (currentHealth / fullHealth) * 10;
+        healthPercentage = ((float)currentHealth / fullHealth) * 100f;
         if (healthPercentage <= 30 && healthPercentage > 20)
         {
             damagePannel1.SetActive(true);
@@ -43,48 +41,34 @@ public class HealthManager : MonoBehaviour
         }
 
     }
-    private void DamageManager(string ActiveBody, GameObject obj)
+    public void DamageManager(GameObject ActiveBody, GameObject obj)
     {
-        obj.GetComponent<HealthManager>().damage = enemyDamage;
-        currentHealth = currentHealth - enemyDamage;
+        enemyDamage = obj.GetComponent<HealthManager>().damage;
 
-        if(ActiveBody == "Player")
+        if (ActiveBody.tag == "Player")
         {
-            Debug.Log("Player Health: " + currentHealth);
+            this.currentHealth -= enemyDamage;
+            Debug.Log("Player Health: " + this.currentHealth);
             DamageVisuals();
-            if (currentHealth <= 0)
+            if (this.currentHealth <= 0)
             {
                 Debug.Log("Player has died");///make a death screen
             }
         }
-        if(ActiveBody == "Enemy")
+        if(ActiveBody.tag == "Enemy")
         {
-            Debug.Log("Enemy Health: " + currentHealth);
-            if (currentHealth <= 0)
+            this.currentHealth -= enemyDamage;
+            Debug.Log("Enemy Health: " + this.currentHealth);
+            if (this.currentHealth <= 0)
             {
                 Debug.Log("Enemy has died");///make a death animation
             }
         }
 
     }
-    private void OnCollisionEnter(Collision collision)
-    {
-        obj = collision.gameObject;
-        if (collision.gameObject.tag == "Enemy")
-        {
-            ActiveBody = "Player";
-            DamageManager(ActiveBody, obj);
-        }
-        if(collision.gameObject.tag == "Player")
-        {
-            ActiveBody = "Enemy";
-            DamageManager(ActiveBody, obj);
-        }
-    }
     void Start()
     {
         currentHealth = fullHealth;
-        deathScreen.SetActive(false);
     }
 
     // Update is called once per frame
