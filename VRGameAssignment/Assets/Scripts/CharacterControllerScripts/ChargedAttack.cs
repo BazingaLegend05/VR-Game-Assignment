@@ -1,14 +1,26 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.XR.Interaction.Toolkit;
 
 public class ChargedAttack : MonoBehaviour
 {
     public int hitsRequired = 5;
-    public ParticleSystem fireParticles;
+    public GameObject fireParticles;
     public AudioSource chargeSound;
+    public GameObject TriggerPanel;
 
     private int currentHits = 0;
     private bool isCharged = false;
     private bool isAbilityActive = false;
+
+    [SerializeField] private InputActionProperty controllerButton;
+
+    private void Start()
+    {
+        if (TriggerPanel != null) TriggerPanel.SetActive(false);
+        if (fireParticles != null) fireParticles.SetActive(false);
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Enemy") && !isCharged)
@@ -18,31 +30,46 @@ public class ChargedAttack : MonoBehaviour
             {
                 TriggerCharge();
             }
-
         }
         if (chargeSound != null) chargeSound.Play();
     }
-    private void TriggerCharge()
-    {
-        isCharged = true;
-        if (fireParticles != null) fireParticles.Play();
-        if (chargeSound != null) chargeSound.Play();
-    }
-    public void ActivateGladiatorRage()
+
+    private void Update()
     {
         if (isCharged)
         {
-            isAbilityActive = true;
-            isCharged = false;
-            currentHits = 0;
-
-            Invoke(nameof(ResetAbility), 5f);
+            if (controllerButton.action != null && controllerButton.action.WasPressedThisFrame())
+            {
+                ActivateGladiatorRage();
+            }
         }
     }
+
+    private void TriggerCharge()
+    {
+        isCharged = true;
+        if (TriggerPanel != null) TriggerPanel.SetActive(true);
+        if (chargeSound != null) chargeSound.Play();
+    }
+
+    public void ActivateGladiatorRage()
+    {
+        isAbilityActive = true;
+        isCharged = false;
+        currentHits = 0;
+
+        if (TriggerPanel != null) TriggerPanel.SetActive(false);
+        if (fireParticles != null) fireParticles.SetActive(true);
+        if (chargeSound != null) chargeSound.Play();
+
+        Invoke(nameof(ResetAbility), 5f);
+    }
+
     void ResetAbility()
     {
         isAbilityActive = false;
-        if (fireParticles != null) fireParticles.Stop();
+        if (fireParticles != null) fireParticles.SetActive(false);
     }
+
     public bool IsHeavyAttackActive() => isAbilityActive;
 }

@@ -10,9 +10,11 @@ public class EnemyMovement : MonoBehaviour
     private Transform PlayerTransform;
     private Transform SwordPosition;
     private Transform SwordPivotPoint;
+    private Rigidbody rb;
 
     void Start()
     {
+        rb = GetComponent<Rigidbody>();
         PlayerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         SwordPosition = GameObject.FindGameObjectWithTag("EnemyWeapon").transform;
         SwordPivotPoint = GameObject.FindGameObjectWithTag("WeaponPivot").transform;
@@ -25,11 +27,8 @@ public class EnemyMovement : MonoBehaviour
         while (true)
         {
             yield return StartCoroutine(ApproachPlayerRoutine());
-
             yield return StartCoroutine(AttackRoutine());
-
             yield return StartCoroutine(RetreatRoutine());
-
             yield return new WaitForSeconds(0.5f);
         }
     }
@@ -43,7 +42,8 @@ public class EnemyMovement : MonoBehaviour
 
             if (directionToPlayer != Vector3.zero)
             {
-                transform.rotation = Quaternion.LookRotation(directionToPlayer);
+                Quaternion targetRot = Quaternion.LookRotation(directionToPlayer);
+                rb.MoveRotation(targetRot);
             }
 
             RaycastHit hit;
@@ -54,7 +54,8 @@ public class EnemyMovement : MonoBehaviour
             {
                 if (hit.transform.CompareTag("Player"))
                 {
-                    transform.position = Vector3.MoveTowards(transform.position, PlayerTransform.position, movementSpeed * Time.deltaTime);
+                    Vector3 nextPos = Vector3.MoveTowards(transform.position, PlayerTransform.position, movementSpeed * Time.deltaTime);
+                    rb.MovePosition(nextPos);
                 }
             }
             yield return null;
@@ -102,12 +103,14 @@ public class EnemyMovement : MonoBehaviour
     {
         Vector3 retreatDirection = (transform.position - PlayerTransform.position).normalized;
         Vector3 targetPosition = transform.position + (retreatDirection * 3f);
+        targetPosition.y = transform.position.y;
 
         while (Vector3.Distance(transform.position, targetPosition) > 0.05f)
         {
-            transform.position = Vector3.MoveTowards(transform.position, targetPosition, movementSpeed * Time.deltaTime);
+            Vector3 nextPos = Vector3.MoveTowards(transform.position, targetPosition, movementSpeed * Time.deltaTime);
+            rb.MovePosition(nextPos);
             yield return null;
         }
-        transform.position = targetPosition;
+        rb.MovePosition(targetPosition);
     }
 }
